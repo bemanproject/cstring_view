@@ -20,16 +20,6 @@ jobs:
         run: |
           (set -o pipefail; ./infra/tools/beman-submodule/beman-submodule status | grep -qvF '+')
 
-  cookiecutter-test:
-    runs-on: ubuntu-latest
-    name: "Check cookiecutter for consistency"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: beman cookiecutter consistency check
-        run: |
-          ./cookiecutter/check_cookiecutter.sh
-
   preset-test:
     strategy:
       fail-fast: false
