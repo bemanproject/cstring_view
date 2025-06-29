@@ -7,75 +7,28 @@ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 <!-- markdownlint-disable-next-line line-length -->
 ![Library Status](https://raw.githubusercontent.com/bemanproject/beman/refs/heads/main/images/badges/beman_badge-beman_library_under_development.svg) ![Continuous Integration Tests](https://github.com/dascandy/cstring_view/actions/workflows/ci_tests.yml/badge.svg) ![Lint Check (pre-commit)](https://github.com/dascandy/cstring_view/actions/workflows/pre-commit.yml/badge.svg)
 
-`beman.cstring_view` is a minimal C++ library conforming to [The Beman Standard](https://github.com/bemanproject/beman/blob/main/docs/BEMAN_STANDARD.md).
-This can be used as a template for those intending to write Beman libraries.
-It may also find use as a minimal and modern  C++ project structure.
+`beman.cstring_view` is a header-only `cstring_view` library. 
 
-**Implements**: `std::identity` proposed in [Standard Library Concepts (P3566R2)](https://wg21.link/P3566R2).
+**Implements**: `std::cstring_view` proposed in [cstring\_view (P3655R2)](https://wg21.link/P3655R2).
 
 **Status**: [Under development and not yet ready for production use.](https://github.com/bemanproject/beman/blob/main/docs/BEMAN_LIBRARY_MATURITY_MODEL.md#under-development-and-not-yet-ready-for-production-use)
 
 ## Usage
 
-`std::identity` is a function object type whose `operator()` returns its argument unchanged.
-`std::identity` serves as the default projection in constrained algorithms.
-Its direct usage is usually not needed.
+`std::cstring_view` exposes a string\_view like type that is intended for being able to propagate prior knowledge that a string is null-terminated throughout the type system, while fulfilling the same role as string\_view.
 
 ### Usage: default projection in constrained algorithms
 
-The following code snippet illustrates how we can achieve a default projection using `beman::cstring_view::identity`:
+The following code snippet illustrates how we can use `cstring_view` to make a beginner-friendly `main`:
 
 ```cpp
-#include <beman/cstring_view/identity.hpp>
+#include <beman/cstring_view/cstring_view.hpp>
+#include <vector>
 
-namespace exe = beman::cstring_view;
-
-// Class with a pair of values.
-struct Pair
-{
-    int n;
-    std::string s;
-
-    // Output the pair in the form {n, s}.
-    // Used by the range-printer if no custom projection is provided (default: identity projection).
-    friend std::ostream &operator<<(std::ostream &os, const Pair &p)
-    {
-        return os << "Pair" << '{' << p.n << ", " << p.s << '}';
-    }
-};
-
-// A range-printer that can print projected (modified) elements of a range.
-// All the elements of the range are printed in the form {element1, element2, ...}.
-// e.g., pairs with identity: Pair{1, one}, Pair{2, two}, Pair{3, three}
-// e.g., pairs with custom projection: {1:one, 2:two, 3:three}
-template <std::ranges::input_range R,
-          typename Projection>
-void print(const std::string_view rem, R &&range, Projection projection = exe::identity>)
-{
-    std::cout << rem << '{';
-    std::ranges::for_each(
-        range,
-        [O = 0](const auto &o) mutable
-        { std::cout << (O++ ? ", " : "") << o; },
-        projection);
-    std::cout << "}\n";
-};
-
-int main()
-{
-    // A vector of pairs to print.
-    const std::vector<Pair> pairs = {
-        {1, "one"},
-        {2, "two"},
-        {3, "three"},
-    };
-
-    // Print the pairs using the default projection.
-    print("\tpairs with beman: ", pairs);
-
-    return 0;
-}
-
+int main(int argc, const char** argv) {
+  std::vector<cstring_view> args(argv, argv+argc);
+  
+} 
 ```
 
 Full runnable examples can be found in [`examples/`](examples/).
@@ -93,26 +46,6 @@ This project requires at least the following to build:
 You can disable building tests by setting cmake option
 [`BEMAN_CSTRING_VIEW_BUILD_TESTS`](#beman_cstring_view_build_tests) to `OFF`
 when configuring the project.
-
-Even when tests are being built and run, some will not be compiled
-unless provided compiler support **C++20** or ranges capabilities enabled.
-
-> [!TIP]
->
-> In the logs you will be able to see if there are any examples that aren't enabled
-> due to compiler capabilities or the configured C++ version.
->
-> Below is an example:
->
-> ```txt
-> -- Looking for __cpp_lib_ranges
-> -- Looking for __cpp_lib_ranges - not found
-> CMake Warning at examples/CMakeLists.txt:12 (message):
->   Missing range support! Skip: identity_as_default_projection
->
->
-> Examples to be built: identity_direct_usage
-> ```
 
 ### Supported Platforms
 
@@ -340,14 +273,14 @@ To use `beman.cstring_view` in your C++ project,
 include an appropriate `beman.cstring_view` header from your source code.
 
 ```c++
-#include <beman/cstring_view/identity.hpp>
+#include <beman/cstring_view/cstring_view.hpp>
 ```
 
 > [!NOTE]
 >
 > `beman.cstring_view` headers are to be included with the `beman/cstring_view/` directories prefixed.
 > It is not supported to alter include search paths to spell the include target another way. For instance,
-> `#include <identity.hpp>` is not a supported interface.
+> `#include <cstring_view.hpp>` is not a supported interface.
 
 How you will link your project against `beman.cstring_view` will depend on your build system.
 CMake instructions are provided in following sections.
@@ -386,7 +319,7 @@ This will generate such directory structure at `/opt/beman.cstring_view`.
 ├── include
 │   └── beman
 │       └── cstring_view
-│           └── identity.hpp
+│           └── cstring_view.hpp
 └── lib
     └── libbeman.cstring_view.a
 ```

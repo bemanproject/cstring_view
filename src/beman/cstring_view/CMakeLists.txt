@@ -5,7 +5,7 @@ include(GNUInstallDirs)
 add_library(beman.cstring_view)
 add_library(beman::cstring_view ALIAS beman.cstring_view)
 
-target_sources(beman.cstring_view PRIVATE identity.cpp)
+target_sources(beman.cstring_view PRIVATE cstring_view.cpp)
 
 target_sources(
     beman.cstring_view
@@ -13,7 +13,7 @@ target_sources(
         FILE_SET HEADERS
         BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../../../include
         FILES
-            ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/beman/cstring_view/identity.hpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/beman/cstring_view/cstring_view.hpp
 )
 
 set_target_properties(

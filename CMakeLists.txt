@@ -2,12 +2,14 @@
 
 cmake_minimum_required(VERSION 3.25)
 
+set(CMAKE_CXX_STANDARD 23)
+
 project(
     beman.cstring_view # CMake Project Name, which is also the name of the top-level
     # targets (e.g., library, executable, etc.).
     DESCRIPTION "cstring_view, a null-terminated string view"
     LANGUAGES CXX
-    VERSION 2.1.1
+    VERSION 0.0.1
 )
 
 # [CMAKE.SKIP_TESTS]
