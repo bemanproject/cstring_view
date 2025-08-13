@@ -1,6 +1,6 @@
 <!--
 Please follow our code of conduct when engaging in the Beman community:
-https://github.com/bemanproject/beman/blob/main/docs/CODE_OF_CONDUCT.md
+https://github.com/bemanproject/beman/blob/main/docs/code_of_conduct.md
 -->
 
 <!--
@@ -8,7 +8,7 @@ Thank you for your contribution!
 
 If you are updating project structure or build configs:
 - Make sure your contribution conforms to the Beman Standard:
-  https://github.com/bemanproject/beman/blob/main/docs/BEMAN_STANDARD.md
+  https://github.com/bemanproject/beman/blob/main/docs/beman_standard.md
 - For new CMake arguments / presets: please make sure you added appropriate CI tests.
 
 If you are updating documentation:

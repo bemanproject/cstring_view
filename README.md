@@ -11,7 +11,7 @@ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 **Implements**: `std::cstring_view` proposed in [cstring\_view (P3655R2)](https://wg21.link/P3655R2).
 
-**Status**: [Under development and not yet ready for production use.](https://github.com/bemanproject/beman/blob/main/docs/BEMAN_LIBRARY_MATURITY_MODEL.md#under-development-and-not-yet-ready-for-production-use)
+**Status**: [Under development and not yet ready for production use.](https://github.com/bemanproject/beman/blob/main/docs/beman_library_maturity_model.md#under-development-and-not-yet-ready-for-production-use)
 
 ## Usage
 
@@ -204,7 +204,7 @@ ctest --test-dir build
 > [!IMPORTANT]
 >
 > Beman projects are
-> [passive projects](https://github.com/bemanproject/beman/blob/main/docs/BEMAN_STANDARD.md#cmake),
+> [passive projects](https://github.com/bemanproject/beman/blob/main/docs/beman_standard.md#cmake),
 > therefore,
 > you will need to specify the C++ version via `CMAKE_CXX_STANDARD`
 > when manually configuring the project.
