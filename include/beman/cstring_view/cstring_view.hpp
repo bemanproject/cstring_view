@@ -2,12 +2,13 @@
 #define BEMAN_CSTRING_VIEW_HPP
 
 #include <cassert>
+#include <cstddef>
 #include <compare>
+#include <format>
 #include <ranges>
 #include <stdexcept>
 #include <string_view>
 #include <string>
-#include <format>
 
 namespace beman {
     // [cstring.view.template], class template basic_cstring_view
@@ -113,9 +114,7 @@ namespace beman {
         constexpr basic_cstring_view(const charT* str, size_type len) : data_(str), size_(len) {
             assert(str[len] == charT());
         }
-        // https://github.com/llvm/llvm-project/issues/154577
-        // constexpr basic_cstring_view(nullptr_t) = delete;
-        constexpr basic_cstring_view(decltype(nullptr)) = delete;
+        constexpr basic_cstring_view(std::nullptr_t) = delete;
 
         // NOTE: Not part of proposal, just to make examples work since I can't add the conversion operator to
         // basic_string.
