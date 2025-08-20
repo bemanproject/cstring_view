@@ -18,6 +18,7 @@ std::string_view to_string(std::strong_ordering order) {
         return "greater";
     } else {
         assert(false);
+        return "internal error";
     }
 }
 

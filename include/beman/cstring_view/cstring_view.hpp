@@ -113,7 +113,9 @@ namespace beman {
         constexpr basic_cstring_view(const charT* str, size_type len) : data_(str), size_(len) {
             assert(str[len] == charT());
         }
-        basic_cstring_view(nullptr_t) = delete;
+        // https://github.com/llvm/llvm-project/issues/154577
+        // constexpr basic_cstring_view(nullptr_t) = delete;
+        constexpr basic_cstring_view(decltype(nullptr)) = delete;
 
         // NOTE: Not part of proposal, just to make examples work since I can't add the conversion operator to
         // basic_string.
