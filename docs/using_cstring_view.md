@@ -35,5 +35,3 @@ Such a `cstring_view` can be used in places where a NUL-terminated string is exp
 ```cpp
 puts(v.c_str());
 ```
-
-

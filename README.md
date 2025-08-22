@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 <!-- markdownlint-disable-next-line line-length -->
 ![Library Status](https://raw.githubusercontent.com/bemanproject/beman/refs/heads/main/images/badges/beman_badge-beman_library_under_development.svg) ![Continuous Integration Tests](https://github.com/dascandy/cstring_view/actions/workflows/ci_tests.yml/badge.svg) ![Lint Check (pre-commit)](https://github.com/dascandy/cstring_view/actions/workflows/pre-commit.yml/badge.svg)
 
-`beman.cstring_view` is a header-only `cstring_view` library. 
+`beman.cstring_view` is a header-only `cstring_view` library.
 
 **Implements**: `std::cstring_view` proposed in [cstring\_view (P3655R2)](https://wg21.link/P3655R2).
 
@@ -27,8 +27,7 @@ The following code snippet illustrates how we can use `cstring_view` to make a b
 
 int main(int argc, const char** argv) {
   std::vector<cstring_view> args(argv, argv+argc);
-  
-} 
+}
 ```
 
 Full runnable examples can be found in [`examples/`](examples/).
