@@ -208,8 +208,11 @@ namespace beman {
             return std::basic_string_view<charT, traits>(*this).copy(s, n, pos);
         }
 
-        constexpr std::basic_string_view<charT, traits> substr(size_type pos = 0, size_type n = npos) const {
+        constexpr std::basic_string_view<charT, traits> substr(size_type pos, size_type n) const {
             return std::basic_string_view<charT, traits>(*this).substr(pos, n);
+        }
+        constexpr basic_cstring_view<charT, traits> substr(size_type pos = 0) const {
+            return { data_ + pos, size_ - pos };
         }
 
         constexpr int compare(std::basic_string_view<charT, traits> s) const noexcept {
