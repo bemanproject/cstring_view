@@ -7,7 +7,7 @@ using namespace beman::literals;
 using namespace std::literals;
 
 TEST(StringView, ConstructionDestruction) {
-    std::string         s = "hello";
+    std::string         s  = "hello";
     beman::cstring_view h1 = "hello";
     beman::cstring_view h2 = h1;
 

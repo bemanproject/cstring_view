@@ -23,7 +23,7 @@ std::string_view to_string(std::strong_ordering order) {
 }
 
 int main() {
-    std::string s = "hello world";
+    std::string         s  = "hello world";
     beman::cstring_view z0 = "hello";
     beman::cstring_view z1 = s;
     beman::cstring_view empty;
@@ -44,8 +44,8 @@ int main() {
     std::cout << z0.c_str() << "\n";
     std::cout << "\"" << empty << "\"\n";
     std::cout << (empty == ""_csv) << "\n";
-    
-    std::wstring ws = L"hello world";
+
+    std::wstring         ws  = L"hello world";
     beman::wcstring_view wz0 = L"hello";
     beman::wcstring_view wz1 = ws;
     beman::wcstring_view wempty;
@@ -55,7 +55,7 @@ int main() {
     std::cout << wz0.starts_with(L"hello") << "\n";
     std::cout << wz0.starts_with(L"hello"_csv) << "\n";
     std::cout << std::hash<beman::wcstring_view>{}(wz1) << "\n";
-    std::wcout<<wz1<<std::endl;
+    std::wcout << wz1 << std::endl;
     std::cout << (L"hello"_csv == L"hello"sv) << "\n";
     std::cout << (L"hello"_csv == L"hello"_csv) << "\n";
     std::cout << (L"hello"_csv != L"goodbye"sv) << "\n";
