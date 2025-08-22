@@ -23,7 +23,7 @@ std::string_view to_string(std::strong_ordering order) {
 }
 
 int main() {
-    std::string         s = "hello world";
+    std::string         s  = "hello world";
     beman::cstring_view z0 = "hello";
     beman::cstring_view z1 = s;
     beman::cstring_view empty;
@@ -45,7 +45,7 @@ int main() {
     std::cout << "\"" << empty << "\"\n";
     std::cout << (empty == ""_csv) << "\n";
 
-    std::wstring         ws = L"hello world";
+    std::wstring         ws  = L"hello world";
     beman::wcstring_view wz0 = L"hello";
     beman::wcstring_view wz1 = ws;
     beman::wcstring_view wempty;
