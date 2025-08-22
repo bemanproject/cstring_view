@@ -15,7 +15,8 @@ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 ## Usage
 
-`std::cstring_view` exposes a string\_view like type that is intended for being able to propagate prior knowledge that a string is null-terminated throughout the type system, while fulfilling the same role as string\_view.
+`std::cstring_view` exposes a string\_view like type that is intended for being able to propagate prior knowledge that
+a string is null-terminated throughout the type system, while fulfilling the same role as string\_view.
 
 ### Usage: default projection in constrained algorithms
 
