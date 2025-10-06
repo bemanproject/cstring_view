@@ -11,9 +11,9 @@ target_sources(
     beman.cstring_view
     PUBLIC
         FILE_SET HEADERS
-        BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../../../include
-        FILES
-            ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/beman/cstring_view/cstring_view.hpp
+            BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../../../include
+            FILES
+                ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/beman/cstring_view/cstring_view.hpp
 )
 
 set_target_properties(
@@ -22,10 +22,10 @@ set_target_properties(
 )
 
 install(
-    TARGETS beman.cstring_view COMPONENT beman.cstring_view
+    TARGETS beman.cstring_view
+    COMPONENT beman.cstring_view
     EXPORT beman.cstring_view
-    DESTINATION
-    ${CMAKE_INSTALL_LIBDIR}$<$<CONFIG:Debug>:/debug>
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}$<$<CONFIG:Debug>:/debug>
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}$<$<CONFIG:Debug>:/debug>
     FILE_SET HEADERS DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )

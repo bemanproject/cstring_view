@@ -59,6 +59,10 @@ function(BemanExemplar_provideDependency method package_name)
         message(FATAL_ERROR "${BemanExemplar_lockfile}: ${BemanExemplar_error}")
     endif()
 
+    if(BemanExemplar_numDependencies EQUAL 0)
+        return()
+    endif()
+
     # Loop over each dependency object
     math(EXPR BemanExemplar_maxIndex "${BemanExemplar_numDependencies} - 1")
     foreach(BemanExemplar_index RANGE "${BemanExemplar_maxIndex}")
@@ -148,7 +152,12 @@ function(BemanExemplar_provideDependency method package_name)
                     APPEND
                     BemanExemplar_debug
                     "Redirecting find_package calls for ${BemanExemplar_pkgName} "
-                    "to FetchContent logic fetching ${BemanExemplar_repo} at "
+                    "to FetchContent logic.\n"
+                )
+                string(
+                    APPEND
+                    BemanExemplar_debug
+                    "Fetching ${BemanExemplar_repo} at "
                     "${BemanExemplar_tag} according to ${BemanExemplar_lockfile}."
                 )
                 message(DEBUG "${BemanExemplar_debug}")
@@ -173,3 +182,6 @@ cmake_language(
     SET_DEPENDENCY_PROVIDER BemanExemplar_provideDependency
     SUPPORTED_METHODS FIND_PACKAGE
 )
+
+# Add this dir to the module path so that `find_package(beman-install-library)` works
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}")
