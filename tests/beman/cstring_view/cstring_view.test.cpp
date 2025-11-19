@@ -1,5 +1,6 @@
-#include <gtest/gtest.h>
 #include <beman/cstring_view/cstring_view.hpp>
+
+#include <gtest/gtest.h>
 #include <string>
 #include <string_view>
 
@@ -7,9 +8,9 @@ using namespace beman::literals;
 using namespace std::literals;
 
 TEST(StringView, ConstructionDestruction) {
-    std::string         s  = "hello";
-    beman::cstring_view h1 = "hello";
-    beman::cstring_view h2 = h1;
+    std::string                   s{"hello"};
+    constexpr beman::cstring_view h1{"hello"};
+    const beman::cstring_view     h2{h1};
 
     EXPECT_EQ(h1.c_str(), h2.c_str());
     EXPECT_NE(h1.c_str(), s.c_str());
@@ -27,4 +28,18 @@ TEST(StringView, ConstructionDestruction) {
     EXPECT_TRUE((std::is_same_v<decltype(end), beman::cstring_view>));
     EXPECT_EQ(first, "he");
     EXPECT_EQ(end, "llo");
+
+    auto str = "   trim me "s;
+    beman::cstring_view v = str;
+    v.remove_prefix(std::min(v.find_first_not_of(" "), v.size()));
+    EXPECT_TRUE(v.starts_with("trim"));
+
+    // TODO: v.remove_suffix(std::min(v.find_last_not_of(" "), v.size()));
+    // std::string_view strv{str};
+    // str.remove_suffix(std::min(v.find_last_not_of(" "), v.size()));
+
+    // TODO: s = first + end;
+    s = first;
+    s += end;   // append()
+    EXPECT_TRUE(s == h1);
 }

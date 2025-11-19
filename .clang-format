@@ -110,7 +110,7 @@ IncludeCategories:
     Priority:        2
     SortPriority:    0
     CaseSensitive:   false
-  - Regex:           '^(<|"(gtest|isl|json)/)'
+  - Regex:           '^(<|"(beman|gtest|isl|json)/)'
     Priority:        3
     SortPriority:    0
     CaseSensitive:   false
@@ -184,7 +184,7 @@ RequiresClausePosition: OwnLine
 RequiresExpressionIndentation: OuterScope
 SeparateDefinitionBlocks: Leave
 ShortNamespaceLines: 1
-SortIncludes:    Never
+SortIncludes:    true
 SortJavaStaticImport: Before
 SortUsingDeclarations: LexicographicNumeric
 SpaceAfterCStyleCast: false
