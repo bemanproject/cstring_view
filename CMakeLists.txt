@@ -32,6 +32,18 @@ option(
     ${PROJECT_IS_TOP_LEVEL}
 )
 
+option(
+    ENABLE_TEST_COVERAGE
+    "Compile with test-coverage flags"
+    ${PROJECT_IS_TOP_LEVEL}
+)
+if(UNIX AND ENABLE_TEST_COVERAGE AND CMAKE_BUILD_TYPE STREQUAL Debug)
+    message(WARNING "ENABLE_TEST_COVERAGE is set!")
+    add_compile_options(-O0 -g -fprofile-arcs -ftest-coverage)
+    add_link_options(-fprofile-arcs -ftest-coverage)
+    # TODO(CK): add_compile_definitions(TARGET_CODE_COVERAGE)
+endif()
+
 include(CTest)
 
 add_subdirectory(src/beman/cstring_view)

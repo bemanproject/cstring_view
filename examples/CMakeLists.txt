@@ -18,4 +18,8 @@ foreach(example ${ALL_EXAMPLES})
         beman.cstring_view.examples.${example}
         PRIVATE beman::cstring_view
     )
+    add_test(
+        NAME beman.cstring_view.examples.${example}
+        COMMAND beman.cstring_view.examples.${example}
+    )
 endforeach()

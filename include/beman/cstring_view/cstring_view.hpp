@@ -2,13 +2,13 @@
 #define BEMAN_CSTRING_VIEW_HPP
 
 #include <cassert>
-#include <cstddef>
 #include <compare>
+#include <cstddef>
 #include <format>
 #include <ranges>
 #include <stdexcept>
-#include <string_view>
 #include <string>
+#include <string_view>
 
 namespace beman {
 

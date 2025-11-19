@@ -7,20 +7,25 @@
 using namespace std::literals;
 using namespace beman::literals;
 
+namespace {
 std::string_view to_string(std::strong_ordering order) {
     if (order == std::strong_ordering::equal) {
         return "equal";
-    } else if (order == std::strong_ordering::equivalent) {
-        return "equivalent";
-    } else if (order == std::strong_ordering::less) {
-        return "less";
-    } else if (order == std::strong_ordering::greater) {
-        return "greater";
-    } else {
-        assert(false);
-        return "internal error";
     }
+    if (order == std::strong_ordering::equivalent) {
+        return "equivalent";
+    }
+    if (order == std::strong_ordering::less) {
+        return "less";
+    }
+    if (order == std::strong_ordering::greater) {
+        return "greater";
+    }
+
+    assert(false);
+    return "internal error";
 }
+} // namespace
 
 int main() {
     std::string         s  = "hello world";
@@ -33,7 +38,7 @@ int main() {
     std::cout << z0.starts_with("hello") << "\n";
     std::cout << z0.starts_with("hello"_csv) << "\n";
     std::cout << std::hash<beman::cstring_view>{}(z1) << "\n";
-    std::cout << z1 << std::endl;
+    std::cout << z1 << "\n";
     std::cout << ("hello"_csv == "hello"sv) << "\n";
     std::cout << ("hello"_csv == "hello"_csv) << "\n";
     std::cout << ("hello"_csv != "goodbye"sv) << "\n";
@@ -55,7 +60,7 @@ int main() {
     std::cout << wz0.starts_with(L"hello") << "\n";
     std::cout << wz0.starts_with(L"hello"_csv) << "\n";
     std::cout << std::hash<beman::wcstring_view>{}(wz1) << "\n";
-    std::wcout << wz1 << std::endl;
+    std::wcout << wz1 << "\n";
     std::cout << (L"hello"_csv == L"hello"sv) << "\n";
     std::cout << (L"hello"_csv == L"hello"_csv) << "\n";
     std::cout << (L"hello"_csv != L"goodbye"sv) << "\n";

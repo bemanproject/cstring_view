@@ -29,17 +29,17 @@ TEST(StringView, ConstructionDestruction) {
     EXPECT_EQ(first, "he");
     EXPECT_EQ(end, "llo");
 
-    auto str = "   trim me "s;
-    beman::cstring_view v = str;
+    auto                str = "   trim me "s;
+    beman::cstring_view v   = str;
     v.remove_prefix(std::min(v.find_first_not_of(" "), v.size()));
     EXPECT_TRUE(v.starts_with("trim"));
 
     // TODO: v.remove_suffix(std::min(v.find_last_not_of(" "), v.size()));
-    // std::string_view strv{str};
-    // str.remove_suffix(std::min(v.find_last_not_of(" "), v.size()));
+    std::string_view strv{v.begin(), v.end()};
+    EXPECT_TRUE(std::min(strv.find_last_not_of("\t\n\r "), strv.size()) < strv.size());
 
     // TODO: s = first + end;
     s = first;
-    s += end;   // append()
+    s += end; // append()
     EXPECT_TRUE(s == h1);
 }
