@@ -5,13 +5,17 @@ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 -->
 
 <!-- markdownlint-disable-next-line line-length -->
-![Library Status](https://raw.githubusercontent.com/bemanproject/beman/refs/heads/main/images/badges/beman_badge-beman_library_under_development.svg) ![Continuous Integration Tests](https://github.com/dascandy/cstring_view/actions/workflows/ci_tests.yml/badge.svg) ![Lint Check (pre-commit)](https://github.com/dascandy/cstring_view/actions/workflows/pre-commit.yml/badge.svg)
+![Library Status](https://raw.githubusercontent.com/bemanproject/beman/refs/heads/main/images/badges/beman_badge-beman_library_under_development.svg) ![Continuous Integration Tests](https://github.com/bemanproject/cstring_view/actions/workflows/ci_tests.yml/badge.svg) ![Lint Check (pre-commit)](https://github.com/bemanproject/cstring_view/actions/workflows/pre-commit.yml/badge.svg) [![Coverage](https://coveralls.io/repos/github/bemanproject/cstring_view/badge.svg?branch=main)
 
 `beman.cstring_view` is a header-only `cstring_view` library.
 
 **Implements**: `std::cstring_view` proposed in [cstring\_view (P3655R2)](https://wg21.link/P3655R2).
 
 **Status**: [Under development and not yet ready for production use.](https://github.com/bemanproject/beman/blob/main/docs/beman_library_maturity_model.md#under-development-and-not-yet-ready-for-production-use)
+
+## License
+
+`beman.exemplar` is licensed under the Apache License v2.0 with LLVM Exceptions.
 
 ## Usage
 
@@ -39,8 +43,8 @@ Full runnable examples can be found in [`examples/`](examples/).
 
 This project requires at least the following to build:
 
-* C++17
-* CMake 3.25
+* A C++ compiler that conforms to the C++17 standard or greater
+* CMake 3.25 or later
 * (Test Only) GoogleTest
 
 You can disable building tests by setting cmake option
@@ -51,10 +55,10 @@ when configuring the project.
 
 This project officially supports:
 
-* GNU GCC Compiler \[version 12-14\]
-* LLVM Clang++ Compiler \[version 17-20\]
-* AppleClang compiler on Mac OS
-* MSVC compiler on Windows
+* GCC versions 11–15
+* LLVM Clang++ (with libstdc++ or libc++) versions 17–21
+* AppleClang version 17.0.0 (i.e., the [latest version on GitHub-hosted macOS runners](https://github.com/actions/runner-images/blob/main/images/macos/macos-15-arm64-Readme.md))
+* MSVC version 19.44.35215.0 (i.e., the [latest version on GitHub-hosted Windows runners](https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md))
 
 > [!NOTE]
 >
@@ -70,7 +74,7 @@ This project officially supports:
 This project supports [GitHub Codespace](https://github.com/features/codespaces)
 via [Development Containers](https://containers.dev/),
 which allows rapid development and instant hacking in your browser.
-We recommend you using GitHub codespace to explore this project as this
+We recommend using GitHub codespace to explore this project as it
 requires minimal setup.
 
 You can create a codespace for this project by clicking this badge:
@@ -89,11 +93,11 @@ GitHub codespaces, please reference [this doc](https://docs.github.com/en/codesp
 ### Develop locally on your machines
 
 <details>
-<summary> For Linux based systems </summary>
+<summary> For Linux </summary>
 
 Beman libraries require [recent versions of CMake](#build-environment),
-we advise you to download CMake directly from [CMake's website](https://cmake.org/download/)
-or install it via the [Kitware apt library](https://apt.kitware.com/).
+we recommend downloading CMake directly from [CMake's website](https://cmake.org/download/)
+or installing it with the [Kitware apt library](https://apt.kitware.com/).
 
 A [supported compiler](#supported-platforms) should be available from your package manager.
 Alternatively you could use an install script from official compiler vendors.
@@ -120,10 +124,10 @@ you are using.
 </details>
 
 <details>
-<summary> For MacOS based systems </summary>
+<summary> For MacOS </summary>
 
 Beman libraries require [recent versions of CMake](#build-environment).
-You can use [`Homebrew`](https://brew.sh/) to install the latest major version of CMake.
+Use [`Homebrew`](https://brew.sh/) to install the latest version of CMake.
 
 ```bash
 brew install cmake
@@ -175,28 +179,31 @@ cmake --workflow --preset gcc-debug
 Generally, there are two kinds of presets, `debug` and `release`.
 
 The `debug` presets are designed to aid development, so it has debugging
-instrumentation enabled and as many sanitizers turned on as possible.
+instrumentation enabled and many sanitizers enabled.
 
 > [!NOTE]
 >
-> The set of sanitizer supports are different across compilers.
-> You can checkout the exact set of compiler arguments by looking at the toolchain
-> files under the [`cmake`](cmake/) directory.
+> The sanitizers that are enabled vary from compiler to compiler.
+> See the toolchain files under ([`cmake`](cmake/)) to determine the exact configuration used for each preset.
 
-The `release` presets are designed for use in production environments,
-thus they have the highest optimization turned on (e.g. `O3`).
+The `release` presets are designed for production use, and
+consequently have the highest optimization turned on (e.g. `O3`).
 
 ### Configure and Build Manually
 
-While [CMake Presets](#configure-and-build-the-project-using-cmake-presets) are
-convenient, you might want to set different configuration or compiler arguments
-than any provided preset supports.
+If the presets are not suitable for your use-case, a traditional CMake
+invocation will provide more configurability.
 
 To configure, build and test the project with extra arguments,
 you can run this set of commands.
 
 ```bash
-cmake -B build -S . -DCMAKE_CXX_STANDARD=20 # Your extra arguments here.
+cmake \
+  -B build \
+  -S . \
+  -DCMAKE_CXX_STANDARD=20 \
+  -DCMAKE_PREFIX_PATH=$PWD/infra/cmake \
+  # Your extra arguments here.
 cmake --build build
 ctest --test-dir build
 ```
