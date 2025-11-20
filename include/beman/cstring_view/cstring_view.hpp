@@ -1,5 +1,7 @@
-#ifndef BEMAN_CSTRING_VIEW_HPP
-#define BEMAN_CSTRING_VIEW_HPP
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+#ifndef BEMAN_CSTRING_VIEW_CSTRING_VIEW_HPP
+#define BEMAN_CSTRING_VIEW_CSTRING_VIEW_HPP
 
 #include <cassert>
 #include <cstddef>
@@ -63,15 +65,15 @@ struct hash<wcstring_view>;
 inline namespace literals {
 inline namespace cstring_view_literals {
 #ifndef _MSC_VER
-#pragma GCC diagnostic push
-#ifdef __clang__
-#pragma GCC diagnostic ignored "-Wuser-defined-literals"
+    #pragma GCC diagnostic push
+    #ifdef __clang__
+        #pragma GCC diagnostic ignored "-Wuser-defined-literals"
+    #else
+        #pragma GCC diagnostic ignored "-Wliteral-suffix"
+    #endif
 #else
-#pragma GCC diagnostic ignored "-Wliteral-suffix"
-#endif
-#else
-#pragma warning(push)
-#pragma warning(disable : 4455)
+    #pragma warning(push)
+    #pragma warning(disable : 4455)
 #endif
 // [cstring.view.literals], suffix for basic_cstring_view literals
 constexpr cstring_view    operator"" csv(const char* str, size_t len) noexcept;
@@ -80,9 +82,9 @@ constexpr u16cstring_view operator"" csv(const char16_t* str, size_t len) noexce
 constexpr u32cstring_view operator"" csv(const char32_t* str, size_t len) noexcept;
 constexpr wcstring_view   operator"" csv(const wchar_t* str, size_t len) noexcept;
 #ifndef _MSC_VER
-#pragma GCC diagnostic pop
+    #pragma GCC diagnostic pop
 #else
-#pragma warning(pop)
+    #pragma warning(pop)
 #endif
 } // namespace cstring_view_literals
 } // namespace literals
@@ -108,11 +110,12 @@ class basic_cstring_view {
     using difference_type           = ptrdiff_t;
     static constexpr size_type npos = size_type(-1);
 
+  private:
+    static constexpr charT empty_string[1]{};
+
+  public:
     // [cstring.view.cons], construction and assignment
-    constexpr basic_cstring_view() noexcept : size_() {
-        static const charT empty_string[1]{};
-        data_ = std::data(empty_string);
-    }
+    constexpr basic_cstring_view() noexcept : size_() { data_ = std::data(empty_string); }
     constexpr basic_cstring_view(const basic_cstring_view&) noexcept            = default;
     constexpr basic_cstring_view& operator=(const basic_cstring_view&) noexcept = default;
     constexpr basic_cstring_view(const charT* str) : basic_cstring_view(str, traits::length(str)) {}
@@ -389,4 +392,4 @@ struct std::hash<beman::wcstring_view> {
     auto operator()(const beman::wcstring_view& sv) const noexcept { return std::hash<wstring_view>{}(sv); }
 };
 
-#endif
+#endif // BEMAN_CSTRING_VIEW_CSTRING_VIEW_HPP
