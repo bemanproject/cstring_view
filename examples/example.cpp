@@ -7,6 +7,7 @@
 using namespace std::literals;
 using namespace beman::literals;
 
+#if __cpp_impl_three_way_comparison >= 201907L
 std::string_view to_string(std::strong_ordering order) {
     if (order == std::strong_ordering::equal) {
         return "equal";
@@ -21,6 +22,7 @@ std::string_view to_string(std::strong_ordering order) {
         return "internal error";
     }
 }
+#endif
 
 int main() {
     std::string         s  = "hello world";
@@ -39,7 +41,9 @@ int main() {
     std::cout << ("hello"_csv != "goodbye"sv) << "\n";
     std::cout << ("hello"_csv != "goodbye"_csv) << "\n";
     std::cout << (z0 == z1) << "\n";
+#if __cpp_impl_three_way_comparison >= 201907L
     std::cout << to_string(z0 <=> z1) << "\n";
+#endif
     std::cout << z0[z0.size()] * 1 << "\n";
     std::cout << z0.c_str() << "\n";
     std::cout << "\"" << empty << "\"\n";
@@ -61,7 +65,9 @@ int main() {
     std::cout << (L"hello"_csv != L"goodbye"sv) << "\n";
     std::cout << (L"hello"_csv != L"goodbye"_csv) << "\n";
     std::cout << (wz0 == wz1) << "\n";
+#if __cpp_impl_three_way_comparison >= 201907L
     std::cout << to_string(wz0 <=> wz1) << "\n";
+#endif
     std::cout << wz0[wz0.size()] * 1 << "\n";
     std::wcout << std::format(L"{}\n", wz0.c_str());
     std::wcout << std::format(L"\"{}\"\n", wempty);

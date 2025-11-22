@@ -1,8 +1,10 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.25...4.2)
 
-set(CMAKE_CXX_STANDARD 23)
+if(NOT DEFINED CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD 20) # NEEDED! for std::type_identity, std::format, std::char8_t, ...!
+endif()
 
 project(
     beman.cstring_view # CMake Project Name, which is also the name of the top-level

@@ -7,6 +7,7 @@
 #include <format>
 #include <ranges>
 #include <stdexcept>
+#include <type_traits> // for std::type_identity_t
 #include <string_view>
 #include <string>
 
@@ -31,8 +32,12 @@ constexpr bool operator==(basic_cstring_view<charT, traits>                     
                           std::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept;
 
 template <class charT, class traits>
+
+#if __cpp_impl_three_way_comparison >= 201907L
 constexpr auto operator<=>(basic_cstring_view<charT, traits>                       x,
                            std::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept;
+
+#endif
 
 // [cstring.view.io], inserters and extractors
 template <class charT, class traits>
@@ -110,7 +115,7 @@ class basic_cstring_view {
 
     // [cstring.view.cons], construction and assignment
     constexpr basic_cstring_view() noexcept : size_() {
-        static const charT empty_string[1]{};
+        // XXX static const charT empty_string[1]{};
         data_ = std::data(empty_string);
     }
     constexpr basic_cstring_view(const basic_cstring_view&) noexcept            = default;
@@ -313,6 +318,8 @@ class basic_cstring_view {
   private:
     const_pointer data_; // exposition only
     size_type     size_; // exposition only
+
+    static constexpr charT empty_string[1]{}; // NOLINT
 };
 
 inline namespace literals {
