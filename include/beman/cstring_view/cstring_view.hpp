@@ -172,6 +172,10 @@ class basic_cstring_view {
         return std::basic_string_view<charT, traits>{data_, size_};
     }
 
+    constexpr operator std::basic_string<charT, traits>() const {
+        return std::basic_string<charT, traits>(data_, size_);
+    }
+
     // [cstring.view.modifiers], modifiers
     constexpr void remove_prefix(size_type n) {
         assert(n <= size());
