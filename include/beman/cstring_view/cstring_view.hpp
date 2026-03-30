@@ -168,7 +168,7 @@ class basic_cstring_view {
     constexpr const_pointer data() const noexcept { return data_; }
     constexpr const_pointer c_str() const noexcept { return data_; }
 
-    operator std::basic_string_view<charT, traits>() const noexcept {
+    constexpr operator std::basic_string_view<charT, traits>() const noexcept {
         return std::basic_string_view<charT, traits>{data_, size_};
     }
 
