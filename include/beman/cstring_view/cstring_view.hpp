@@ -98,13 +98,13 @@ inline namespace cstring_view_literals {
     #pragma warning(disable : 4455)
 #endif
 // [cstring.view.literals], suffix for basic_cstring_view literals
-constexpr cstring_view operator"" csv(const char* str, size_t len) noexcept;
+constexpr cstring_view operator""_csv(const char* str, size_t len) noexcept;
 #if __cpp_char8_t >= 201811L
-constexpr u8cstring_view operator"" csv(const char8_t* str, size_t len) noexcept;
+constexpr u8cstring_view operator""_csv(const char8_t* str, size_t len) noexcept;
 #endif
-constexpr u16cstring_view operator"" csv(const char16_t* str, size_t len) noexcept;
-constexpr u32cstring_view operator"" csv(const char32_t* str, size_t len) noexcept;
-constexpr wcstring_view   operator"" csv(const wchar_t* str, size_t len) noexcept;
+constexpr u16cstring_view operator""_csv(const char16_t* str, size_t len) noexcept;
+constexpr u32cstring_view operator""_csv(const char32_t* str, size_t len) noexcept;
+constexpr wcstring_view   operator""_csv(const wchar_t* str, size_t len) noexcept;
 #ifndef _MSC_VER
     #pragma GCC diagnostic pop
 #else
