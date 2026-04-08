@@ -84,22 +84,6 @@ using u16cstring_view = basic_cstring_view<char16_t>;
 using u32cstring_view = basic_cstring_view<char32_t>;
 using wcstring_view   = basic_cstring_view<wchar_t>;
 
-// [cstring.view.hash], hash support
-template <class T>
-struct hash;
-template <>
-struct hash<cstring_view>;
-#if __cpp_char8_t >= 201811L
-template <>
-struct hash<u8cstring_view>;
-#endif
-template <>
-struct hash<u16cstring_view>;
-template <>
-struct hash<u32cstring_view>;
-template <>
-struct hash<wcstring_view>;
-
 inline namespace literals {
 inline namespace cstring_view_literals {
 #ifndef _MSC_VER
@@ -451,6 +435,7 @@ struct std::formatter<beman::basic_cstring_view<charT, traits>, charT> {
 };
 #endif
 
+// [cstring.view.hash], hash support
 template <>
 struct std::hash<beman::cstring_view> {
     auto operator()(const beman::cstring_view& sv) const noexcept { return std::hash<string_view>{}(sv); }
