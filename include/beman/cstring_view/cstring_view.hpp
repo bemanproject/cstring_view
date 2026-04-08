@@ -19,8 +19,10 @@
 namespace beman {
 
 #if __cpp_concepts >= 201907L
-template<typename T>
-  concept cstring_like = requires(const T & t) { { t.c_str() } -> std::same_as<const T::value_type*> };
+template <typename T>
+concept cstring_like = requires(const T& t) {
+    { t.c_str() } -> std::same_as<const typename T::value_type*>;
+};
 #endif
 
 // [cstring.view.template], class template basic_cstring_view
@@ -114,18 +116,15 @@ class basic_cstring_view {
     }
     constexpr basic_cstring_view(std::nullptr_t) = delete;
 
-    template <typename R
 #if __cpp_concepts < 201907L
     // Just pretend this is doing the concept match that the paper proposes
-    , typename = decltype((*(std::decay_t<R>*)0).c_str())
+    template <typename R, typename = decltype((*(std::decay_t<R>*)0).c_str())>
+    constexpr basic_cstring_view(R&& r)
+#else
+    constexpr basic_cstring_view(cstring_like auto r)
 #endif
-    >
-    constexpr basic_cstring_view(
-#if __cpp_concepts >= 201907L
-                                 cstring_like
-#endif
-                                              R&& r)
-    : basic_cstring_view(r.c_str(), r.size()) {}
+        : basic_cstring_view(r.c_str(), r.size()) {
+    }
 
     // [cstring.view.iterators], iterator support
     constexpr const_iterator         begin() const noexcept { return data_; }
