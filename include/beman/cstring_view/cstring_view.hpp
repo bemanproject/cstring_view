@@ -5,14 +5,30 @@
 
 #include <cassert>
 #include <cstddef>
-#include <compare>
-#include <format>
+#if __has_include(<compare>)
+    #include <compare>
+#endif
+#if __has_include(<format>)
+    #include <format>
+#endif
 #include <ranges>
 #include <stdexcept>
 #include <string_view>
 #include <string>
 
 namespace beman {
+
+namespace detail {
+
+template <typename T>
+struct type_identity {
+    using type = T;
+};
+
+template <typename T>
+using type_identity_t = typename type_identity<T>::type;
+
+} // namespace detail
 
 // [cstring.view.template], class template basic_cstring_view
 template <class charT, class traits = std::char_traits<charT>>
@@ -29,12 +45,30 @@ namespace ranges {
 */
 // [cstring.view.comparison], non-member comparison functions
 template <class charT, class traits>
-constexpr bool operator==(basic_cstring_view<charT, traits>                       x,
-                          std::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept;
+constexpr bool operator==(basic_cstring_view<charT, traits>                          x,
+                          detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept;
 
+#if __cpp_lib_three_way_comparison
 template <class charT, class traits>
-constexpr auto operator<=>(basic_cstring_view<charT, traits>                       x,
-                           std::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept;
+constexpr auto operator<=>(basic_cstring_view<charT, traits>                          x,
+                           detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept;
+#else
+template <class charT, class traits>
+constexpr bool operator!=(basic_cstring_view<charT, traits>                          x,
+                          detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept;
+template <class charT, class traits>
+constexpr bool operator<(basic_cstring_view<charT, traits>                          x,
+                         detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept;
+template <class charT, class traits>
+constexpr bool operator>(basic_cstring_view<charT, traits>                          x,
+                         detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept;
+template <class charT, class traits>
+constexpr bool operator<=(basic_cstring_view<charT, traits>                          x,
+                          detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept;
+template <class charT, class traits>
+constexpr bool operator>=(basic_cstring_view<charT, traits>                          x,
+                          detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept;
+#endif
 
 // [cstring.view.io], inserters and extractors
 template <class charT, class traits>
@@ -42,8 +76,10 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
                                               basic_cstring_view<charT, traits>  str);
 
 // basic_cstring_view typedef-names
-using cstring_view    = basic_cstring_view<char>;
-using u8cstring_view  = basic_cstring_view<char8_t>;
+using cstring_view = basic_cstring_view<char>;
+#if __cpp_char8_t >= 201811L
+using u8cstring_view = basic_cstring_view<char8_t>;
+#endif
 using u16cstring_view = basic_cstring_view<char16_t>;
 using u32cstring_view = basic_cstring_view<char32_t>;
 using wcstring_view   = basic_cstring_view<wchar_t>;
@@ -53,8 +89,10 @@ template <class T>
 struct hash;
 template <>
 struct hash<cstring_view>;
+#if __cpp_char8_t >= 201811L
 template <>
 struct hash<u8cstring_view>;
+#endif
 template <>
 struct hash<u16cstring_view>;
 template <>
@@ -76,8 +114,10 @@ inline namespace cstring_view_literals {
     #pragma warning(disable : 4455)
 #endif
 // [cstring.view.literals], suffix for basic_cstring_view literals
-constexpr cstring_view    operator"" csv(const char* str, size_t len) noexcept;
-constexpr u8cstring_view  operator"" csv(const char8_t* str, size_t len) noexcept;
+constexpr cstring_view operator"" csv(const char* str, size_t len) noexcept;
+#if __cpp_char8_t >= 201811L
+constexpr u8cstring_view operator"" csv(const char8_t* str, size_t len) noexcept;
+#endif
 constexpr u16cstring_view operator"" csv(const char16_t* str, size_t len) noexcept;
 constexpr u32cstring_view operator"" csv(const char32_t* str, size_t len) noexcept;
 constexpr wcstring_view   operator"" csv(const wchar_t* str, size_t len) noexcept;
@@ -153,7 +193,12 @@ class basic_cstring_view {
     }
     constexpr const_reference at(size_type pos) const {
         if (pos > size_) {
+#if __cpp_lib_format >= 201907L
             throw std::out_of_range(std::format("basic_cstring_view::at: pos ({}) > size() {}", pos, size_));
+#else
+            throw std::out_of_range(std::string{"basic_cstring_view::at: pos ("} + std::to_string(pos) +
+                                    std::string{") > size() "} + std::to_string(size_));
+#endif
         }
         return data_[pos];
     }
@@ -210,6 +255,7 @@ class basic_cstring_view {
         return std::basic_string_view<charT, traits>(*this).compare(pos1, n1, s, n2);
     }
 
+#if __cpp_lib_starts_ends_with >= 201711L
     constexpr bool starts_with(std::basic_string_view<charT, traits> x) const noexcept {
         return std::basic_string_view<charT, traits>(*this).starts_with(x);
     }
@@ -228,6 +274,7 @@ class basic_cstring_view {
     constexpr bool ends_with(const charT* x) const {
         return std::basic_string_view<charT, traits>(*this).ends_with(x);
     }
+#endif
 
     constexpr bool contains(std::basic_string_view<charT, traits> x) const noexcept {
         return std::basic_string_view<charT, traits>(*this).contains(x);
@@ -321,10 +368,12 @@ class basic_cstring_view {
 inline namespace literals {
 inline namespace cstring_view_literals {
 // [cstring.view.literals], suffix for basic_cstring_view literals
-constexpr cstring_view   operator""_csv(const char* str, size_t len) noexcept { return basic_cstring_view(str, len); }
+constexpr cstring_view operator""_csv(const char* str, size_t len) noexcept { return basic_cstring_view(str, len); }
+#if __cpp_char8_t >= 201811L
 constexpr u8cstring_view operator""_csv(const char8_t* str, size_t len) noexcept {
     return basic_cstring_view(str, len);
 }
+#endif
 constexpr u16cstring_view operator""_csv(const char16_t* str, size_t len) noexcept {
     return basic_cstring_view(str, len);
 }
@@ -338,16 +387,45 @@ constexpr wcstring_view operator""_csv(const wchar_t* str, size_t len) noexcept 
 } // namespace literals
 
 template <class charT, class traits>
-constexpr bool operator==(basic_cstring_view<charT, traits>                       x,
-                          std::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept {
+constexpr bool operator==(basic_cstring_view<charT, traits>                          x,
+                          detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept {
     return std::basic_string_view<charT, traits>(x) == std::basic_string_view<charT, traits>(y);
 }
 
+#if __cpp_lib_three_way_comparison
 template <class charT, class traits>
-constexpr auto operator<=>(basic_cstring_view<charT, traits>                       x,
-                           std::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept {
+constexpr auto operator<=>(basic_cstring_view<charT, traits>                          x,
+                           detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept {
     return std::basic_string_view<charT, traits>(x) <=> std::basic_string_view<charT, traits>(y);
 }
+#else
+template <class charT, class traits>
+constexpr bool operator!=(basic_cstring_view<charT, traits>                          x,
+                          detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept {
+    return std::basic_string_view<charT, traits>(x) != std::basic_string_view<charT, traits>(y);
+}
+// Definitions
+template <class charT, class traits>
+constexpr bool operator<(basic_cstring_view<charT, traits>                          x,
+                         detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept {
+    return std::basic_string_view<charT, traits>(x) < std::basic_string_view<charT, traits>(y);
+}
+template <class charT, class traits>
+constexpr bool operator>(basic_cstring_view<charT, traits>                          x,
+                         detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept {
+    return std::basic_string_view<charT, traits>(x) > std::basic_string_view<charT, traits>(y);
+}
+template <class charT, class traits>
+constexpr bool operator<=(basic_cstring_view<charT, traits>                          x,
+                          detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept {
+    return std::basic_string_view<charT, traits>(x) <= std::basic_string_view<charT, traits>(y);
+}
+template <class charT, class traits>
+constexpr bool operator>=(basic_cstring_view<charT, traits>                          x,
+                          detail::type_identity_t<basic_cstring_view<charT, traits>> y) noexcept {
+    return std::basic_string_view<charT, traits>(x) >= std::basic_string_view<charT, traits>(y);
+}
+#endif
 
 template <class charT, class traits>
 std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os,
@@ -357,6 +435,7 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
 
 } // namespace beman
 
+#if __cpp_lib_format >= 201907L
 // [format.formatter.spec]
 template <class charT, class traits>
 struct std::formatter<beman::basic_cstring_view<charT, traits>, charT> {
@@ -370,15 +449,18 @@ struct std::formatter<beman::basic_cstring_view<charT, traits>, charT> {
   private:
     formatter<std::basic_string_view<charT, traits>, charT> sv_formatter;
 };
+#endif
 
 template <>
 struct std::hash<beman::cstring_view> {
     auto operator()(const beman::cstring_view& sv) const noexcept { return std::hash<string_view>{}(sv); }
 };
+#if __cpp_char8_t >= 201811L
 template <>
 struct std::hash<beman::u8cstring_view> {
     auto operator()(const beman::u8cstring_view& sv) const noexcept { return std::hash<u8string_view>{}(sv); }
 };
+#endif
 template <>
 struct std::hash<beman::u16cstring_view> {
     auto operator()(const beman::u16cstring_view& sv) const noexcept { return std::hash<u16string_view>{}(sv); }
