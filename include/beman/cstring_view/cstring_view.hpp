@@ -121,7 +121,7 @@ class basic_cstring_view {
     template <typename R, typename = decltype((*(std::decay_t<R>*)0).c_str())>
     constexpr basic_cstring_view(R&& r)
 #else
-    constexpr basic_cstring_view(cstring_like auto r)
+    constexpr basic_cstring_view(cstring_like auto& r)
 #endif
         : basic_cstring_view(r.c_str(), r.size()) {
     }
