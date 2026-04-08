@@ -17,6 +17,7 @@ TEST(StringView, ConstructionDestruction) {
     EXPECT_NE(h1.c_str(), s.c_str());
     EXPECT_TRUE(h1 == h2);
     EXPECT_TRUE(h1 == s);
+    EXPECT_TRUE(s == h1);
 #if __cpp_lib_starts_ends_with >= 201711L
     EXPECT_TRUE(h1.starts_with("he"));
     EXPECT_TRUE(h1.ends_with("lo"));
