@@ -18,7 +18,8 @@
 
 namespace beman {
 
-#if __cpp_concepts >= 201907L
+#if !defined(USE_CPP17_VARIANT)
+static_assert(__cpp_concepts >= 201907L);
 template <typename T>
 concept cstring_like = requires(const T& t) {
     { t.c_str() } -> std::same_as<const typename T::value_type*>;
@@ -116,11 +117,12 @@ class basic_cstring_view {
     }
     constexpr basic_cstring_view(std::nullptr_t) = delete;
 
-#if __cpp_concepts < 201907L
+#if defined(USE_CPP17_VARIANT)
     // Just pretend this is doing the concept match that the paper proposes
     template <typename R, typename = decltype((*(std::decay_t<R>*)0).c_str())>
     constexpr basic_cstring_view(R&& r)
 #else
+    static_assert(__cpp_concepts >= 201907L);
     constexpr basic_cstring_view(const cstring_like auto& r)
 #endif
         : basic_cstring_view(r.c_str(), r.size()) {
