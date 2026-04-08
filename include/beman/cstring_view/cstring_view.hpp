@@ -18,6 +18,11 @@
 
 namespace beman {
 
+#if __cpp_concepts >= 201907L
+template<typename T>
+  concept cstring_like = requires(const T & t) { { t.c_str() } -> std::same_as<const T::value_type*> };
+#endif
+
 // [cstring.view.template], class template basic_cstring_view
 template <class charT, class traits = std::char_traits<charT>>
 class basic_cstring_view; // partially freestanding
@@ -109,11 +114,18 @@ class basic_cstring_view {
     }
     constexpr basic_cstring_view(std::nullptr_t) = delete;
 
-    // NOTE: Not part of proposal, just to make examples work since I can't add the conversion operator to
-    // basic_string.
-    template <typename Traits, typename Allocator>
-    constexpr basic_cstring_view(const std::basic_string<charT, Traits, Allocator>& str)
-        : basic_cstring_view(str.c_str(), str.size()) {}
+    template <typename R
+#if __cpp_concepts < 201907L
+    // Just pretend this is doing the concept match that the paper proposes
+    , typename = decltype((*(std::decay_t<R>*)0).c_str())
+#endif
+    >
+    constexpr basic_cstring_view(
+#if __cpp_concepts >= 201907L
+                                 cstring_like
+#endif
+                                              R&& r)
+    : basic_cstring_view(r.c_str(), r.size()) {}
 
     // [cstring.view.iterators], iterator support
     constexpr const_iterator         begin() const noexcept { return data_; }
