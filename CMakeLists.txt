@@ -17,6 +17,13 @@ option(
     ${PROJECT_IS_TOP_LEVEL}
 )
 
+# [CMAKE.CPP17_MODE]
+option(
+    BEMAN_CSTRING_VIEW_CPP17_MODE
+    "Use the C++17 compatible implementation. Default: OFF. Values: { ON, OFF }."
+    OFF
+)
+
 # [CMAKE.SKIP_EXAMPLES]
 option(
     BEMAN_CSTRING_VIEW_BUILD_EXAMPLES
@@ -43,6 +50,10 @@ set_target_properties(
 add_subdirectory(include/beman/cstring_view)
 
 beman_install_library(beman.cstring_view TARGETS beman.cstring_view)
+
+if(BEMAN_CSTRING_VIEW_CPP17_MODE)
+    target_compile_options(beman.cstring_view INTERFACE -DUSE_CPP17_VARIANT)
+endif()
 
 if(BEMAN_CSTRING_VIEW_BUILD_TESTS)
     enable_testing()
