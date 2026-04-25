@@ -16,7 +16,7 @@
 #include <string_view>
 #include <string>
 
-namespace beman {
+namespace beman::cstring_view {
 
 #if !defined(USE_CPP17_VARIANT)
 static_assert(__cpp_concepts >= 201907L);
@@ -81,7 +81,7 @@ constexpr wcstring_view   operator""_csv(const wchar_t* str, size_t len) noexcep
 #endif
 } // namespace cstring_view_literals
 } // namespace literals
-} // namespace beman
+} // namespace beman::cstring_view
 
 namespace beman {
 
