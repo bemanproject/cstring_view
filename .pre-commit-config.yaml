@@ -45,5 +45,4 @@ repos:
     hooks:
       - id: beman-tidy
 
-
 exclude: 'cookiecutter/|infra/'
