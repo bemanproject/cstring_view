@@ -378,7 +378,7 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
     return os << std::basic_string_view<charT, traits>(str);
 }
 
-} // namespace beman
+} // namespace beman::cstring_view
 
 #if __cpp_lib_format >= 201907L
 // [format.formatter.spec]
