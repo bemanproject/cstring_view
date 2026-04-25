@@ -394,7 +394,8 @@ struct std::formatter<beman::cstring_view::basic_cstring_view<charT, traits>, ch
     formatter() = default;
     constexpr auto parse(basic_format_parse_context<charT>& context) { return sv_formatter.parse(context); }
     template <typename _Out>
-    auto format(beman::basic_cstring_view<charT, traits> csv, basic_format_context<_Out, charT>& context) const {
+    auto format(beman::cstring_view::basic_cstring_view<charT, traits> csv,
+                basic_format_context<_Out, charT>&                     context) const {
         return sv_formatter.format(csv, context);
     }
 
