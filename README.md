@@ -87,6 +87,17 @@ For details on building beman.cstring_view without using a CMake preset, refer t
 
 ### Installation
 
+#### Vcpkg
+
+The preferred way to install cstring_view is via vcpkg. To do so, after installing vcpkg
+itself, you need to add support for the Beman project's [vcpkg
+registry](https://github.com/bemanproject/vcpkg-registry) by configuring a
+`vcpkg-configuration.json` file (which cstring_view [provides](vcpkg-configuration.json)).
+
+Then, simply run `vcpkg install beman-cstring-view`.
+
+#### Manual
+
 To install beman.cstring_view globally after building with the `gcc-release` preset, you can
 run:
 

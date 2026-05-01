@@ -3,8 +3,7 @@
 cmake_minimum_required(VERSION 3.30...4.3)
 
 project(
-    beman.cstring_view # CMake Project Name, which is also the name of the top-level
-    # targets (e.g., library, executable, etc.).
+    beman.cstring_view
     DESCRIPTION "A null-terminated string view."
     LANGUAGES CXX
     VERSION 0.1.0

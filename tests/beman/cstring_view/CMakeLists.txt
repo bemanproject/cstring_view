@@ -13,4 +13,4 @@ target_link_libraries(
 )
 
 include(GoogleTest)
-gtest_discover_tests(beman.cstring_view.tests.cstring_view)
+gtest_discover_tests(beman.cstring_view.tests.cstring_view DISCOVERY_TIMEOUT 60)
