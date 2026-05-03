@@ -17,6 +17,7 @@
 #include <string>
 
 namespace beman {
+namespace cstring_view {
 
 #if !defined(USE_CPP17_VARIANT)
 static_assert(__cpp_concepts >= 201907L);
@@ -53,7 +54,10 @@ using u16cstring_view = basic_cstring_view<char16_t>;
 using u32cstring_view = basic_cstring_view<char32_t>;
 using wcstring_view   = basic_cstring_view<wchar_t>;
 
-inline namespace literals {
+} // namespace cstring_view
+} // namespace beman
+
+namespace beman::cstring_view::literals {
 inline namespace cstring_view_literals {
 #ifndef _MSC_VER
     #pragma GCC diagnostic push
@@ -67,23 +71,23 @@ inline namespace cstring_view_literals {
     #pragma warning(disable : 4455)
 #endif
 // [cstring.view.literals], suffix for basic_cstring_view literals
-constexpr cstring_view operator""_csv(const char* str, size_t len) noexcept;
+constexpr beman::cstring_view::cstring_view operator""_csv(const char* str, size_t len) noexcept;
 #if __cpp_char8_t >= 201811L
-constexpr u8cstring_view operator""_csv(const char8_t* str, size_t len) noexcept;
+constexpr beman::cstring_view::u8cstring_view operator""_csv(const char8_t* str, size_t len) noexcept;
 #endif
-constexpr u16cstring_view operator""_csv(const char16_t* str, size_t len) noexcept;
-constexpr u32cstring_view operator""_csv(const char32_t* str, size_t len) noexcept;
-constexpr wcstring_view   operator""_csv(const wchar_t* str, size_t len) noexcept;
+constexpr beman::cstring_view::u16cstring_view operator""_csv(const char16_t* str, size_t len) noexcept;
+constexpr beman::cstring_view::u32cstring_view operator""_csv(const char32_t* str, size_t len) noexcept;
+constexpr beman::cstring_view::wcstring_view   operator""_csv(const wchar_t* str, size_t len) noexcept;
 #ifndef _MSC_VER
     #pragma GCC diagnostic pop
 #else
     #pragma warning(pop)
 #endif
 } // namespace cstring_view_literals
-} // namespace literals
-} // namespace beman
+} // namespace beman::cstring_view::literals
 
 namespace beman {
+namespace cstring_view {
 
 template <class charT, class traits /* = char_traits<charT> */>
 class basic_cstring_view {
@@ -351,43 +355,47 @@ class basic_cstring_view {
     size_type     size_; // exposition only
 };
 
-inline namespace literals {
-inline namespace cstring_view_literals {
-// [cstring.view.literals], suffix for basic_cstring_view literals
-constexpr cstring_view operator""_csv(const char* str, size_t len) noexcept { return basic_cstring_view(str, len); }
-#if __cpp_char8_t >= 201811L
-constexpr u8cstring_view operator""_csv(const char8_t* str, size_t len) noexcept {
-    return basic_cstring_view(str, len);
-}
-#endif
-constexpr u16cstring_view operator""_csv(const char16_t* str, size_t len) noexcept {
-    return basic_cstring_view(str, len);
-}
-constexpr u32cstring_view operator""_csv(const char32_t* str, size_t len) noexcept {
-    return basic_cstring_view(str, len);
-}
-constexpr wcstring_view operator""_csv(const wchar_t* str, size_t len) noexcept {
-    return basic_cstring_view(str, len);
-}
-} // namespace cstring_view_literals
-} // namespace literals
-
 template <class charT, class traits>
 std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os,
                                               basic_cstring_view<charT, traits>  str) {
     return os << std::basic_string_view<charT, traits>(str);
 }
 
+} // namespace cstring_view
 } // namespace beman
+
+namespace beman::cstring_view::literals {
+inline namespace cstring_view_literals {
+// [cstring.view.literals], suffix for basic_cstring_view literals
+constexpr beman::cstring_view::cstring_view operator""_csv(const char* str, size_t len) noexcept {
+    return beman::cstring_view::basic_cstring_view(str, len);
+}
+#if __cpp_char8_t >= 201811L
+constexpr beman::cstring_view::u8cstring_view operator""_csv(const char8_t* str, size_t len) noexcept {
+    return beman::cstring_view::basic_cstring_view(str, len);
+}
+#endif
+constexpr beman::cstring_view::u16cstring_view operator""_csv(const char16_t* str, size_t len) noexcept {
+    return beman::cstring_view::basic_cstring_view(str, len);
+}
+constexpr beman::cstring_view::u32cstring_view operator""_csv(const char32_t* str, size_t len) noexcept {
+    return beman::cstring_view::basic_cstring_view(str, len);
+}
+constexpr beman::cstring_view::wcstring_view operator""_csv(const wchar_t* str, size_t len) noexcept {
+    return beman::cstring_view::basic_cstring_view(str, len);
+}
+} // namespace cstring_view_literals
+} // namespace beman::cstring_view::literals
 
 #if __cpp_lib_format >= 201907L
 // [format.formatter.spec]
 template <class charT, class traits>
-struct std::formatter<beman::basic_cstring_view<charT, traits>, charT> {
+struct std::formatter<beman::cstring_view::basic_cstring_view<charT, traits>, charT> {
     formatter() = default;
     constexpr auto parse(basic_format_parse_context<charT>& context) { return sv_formatter.parse(context); }
     template <typename _Out>
-    auto format(beman::basic_cstring_view<charT, traits> csv, basic_format_context<_Out, charT>& context) const {
+    auto format(beman::cstring_view::basic_cstring_view<charT, traits> csv,
+                basic_format_context<_Out, charT>&                     context) const {
         return sv_formatter.format(csv, context);
     }
 
@@ -398,26 +406,36 @@ struct std::formatter<beman::basic_cstring_view<charT, traits>, charT> {
 
 // [cstring.view.hash], hash support
 template <>
-struct std::hash<beman::cstring_view> {
-    auto operator()(const beman::cstring_view& sv) const noexcept { return std::hash<string_view>{}(sv); }
+struct std::hash<beman::cstring_view::cstring_view> {
+    auto operator()(const beman::cstring_view::cstring_view& sv) const noexcept {
+        return std::hash<string_view>{}(sv);
+    }
 };
 #if __cpp_char8_t >= 201811L
 template <>
-struct std::hash<beman::u8cstring_view> {
-    auto operator()(const beman::u8cstring_view& sv) const noexcept { return std::hash<u8string_view>{}(sv); }
+struct std::hash<beman::cstring_view::u8cstring_view> {
+    auto operator()(const beman::cstring_view::u8cstring_view& sv) const noexcept {
+        return std::hash<u8string_view>{}(sv);
+    }
 };
 #endif
 template <>
-struct std::hash<beman::u16cstring_view> {
-    auto operator()(const beman::u16cstring_view& sv) const noexcept { return std::hash<u16string_view>{}(sv); }
+struct std::hash<beman::cstring_view::u16cstring_view> {
+    auto operator()(const beman::cstring_view::u16cstring_view& sv) const noexcept {
+        return std::hash<u16string_view>{}(sv);
+    }
 };
 template <>
-struct std::hash<beman::u32cstring_view> {
-    auto operator()(const beman::u32cstring_view& sv) const noexcept { return std::hash<u32string_view>{}(sv); }
+struct std::hash<beman::cstring_view::u32cstring_view> {
+    auto operator()(const beman::cstring_view::u32cstring_view& sv) const noexcept {
+        return std::hash<u32string_view>{}(sv);
+    }
 };
 template <>
-struct std::hash<beman::wcstring_view> {
-    auto operator()(const beman::wcstring_view& sv) const noexcept { return std::hash<wstring_view>{}(sv); }
+struct std::hash<beman::cstring_view::wcstring_view> {
+    auto operator()(const beman::cstring_view::wcstring_view& sv) const noexcept {
+        return std::hash<wstring_view>{}(sv);
+    }
 };
 
 #endif // BEMAN_CSTRING_VIEW_CSTRING_VIEW_HPP

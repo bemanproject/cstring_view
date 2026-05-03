@@ -43,6 +43,7 @@ repos:
   - repo: https://github.com/bemanproject/beman-tidy
     rev: v0.4.0
     hooks:
-      - id: beman-tidy
+    - id: beman-tidy
+      args: [".", "--verbose", "--require-all"]
 
 exclude: 'cookiecutter/|infra/|port/'
