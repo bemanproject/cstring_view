@@ -7,7 +7,7 @@
 #include <string_view>
 
 using namespace std::literals;
-using namespace beman::literals;
+using namespace beman::cstring_view::literals;
 
 #if __cpp_lib_three_way_comparison
 std::string_view to_string(std::strong_ordering order) {
@@ -27,10 +27,10 @@ std::string_view to_string(std::strong_ordering order) {
 #endif
 
 int main() {
-    std::string         s  = "hello world";
-    beman::cstring_view z0 = "hello";
-    beman::cstring_view z1 = s;
-    beman::cstring_view empty;
+    std::string                       s  = "hello world";
+    beman::cstring_view::cstring_view z0 = "hello";
+    beman::cstring_view::cstring_view z1 = s;
+    beman::cstring_view::cstring_view empty;
     std::cout << z0 << "\n";
 #if __cpp_lib_starts_ends_with >= 201711L
     std::cout << s.starts_with(z0) << "\n";
@@ -38,7 +38,7 @@ int main() {
     std::cout << z0.starts_with("hello") << "\n";
     std::cout << z0.starts_with("hello"_csv) << "\n";
 #endif
-    std::cout << std::hash<beman::cstring_view>{}(z1) << "\n";
+    std::cout << std::hash<beman::cstring_view::cstring_view>{}(z1) << "\n";
     std::cout << z1 << std::endl;
     std::cout << ("hello"_csv == "hello"sv) << "\n";
     std::cout << ("hello"_csv == "hello"_csv) << "\n";
@@ -53,10 +53,10 @@ int main() {
     std::cout << "\"" << empty << "\"\n";
     std::cout << (empty == ""_csv) << "\n";
 
-    std::wstring         ws  = L"hello world";
-    beman::wcstring_view wz0 = L"hello";
-    beman::wcstring_view wz1 = ws;
-    beman::wcstring_view wempty;
+    std::wstring                       ws  = L"hello world";
+    beman::cstring_view::wcstring_view wz0 = L"hello";
+    beman::cstring_view::wcstring_view wz1 = ws;
+    beman::cstring_view::wcstring_view wempty;
 #if __cpp_lib_format >= 201907L
     std::wcout << std::format(L"{}\n", wz0);
 #endif
@@ -66,7 +66,7 @@ int main() {
     std::cout << wz0.starts_with(L"hello") << "\n";
     std::cout << wz0.starts_with(L"hello"_csv) << "\n";
 #endif
-    std::cout << std::hash<beman::wcstring_view>{}(wz1) << "\n";
+    std::cout << std::hash<beman::cstring_view::wcstring_view>{}(wz1) << "\n";
     std::wcout << wz1 << std::endl;
     std::cout << (L"hello"_csv == L"hello"sv) << "\n";
     std::cout << (L"hello"_csv == L"hello"_csv) << "\n";

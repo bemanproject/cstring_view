@@ -28,6 +28,8 @@ The following code snippet illustrates how we can use `cstring_view` to make a b
 #include <beman/cstring_view/cstring_view.hpp>
 #include <vector>
 
+using namespace beman::cstring_view;
+
 int main(int argc, const char** argv) {
   std::vector<cstring_view> args(argv, argv+argc);
 }
