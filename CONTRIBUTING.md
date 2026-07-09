@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+-->
+
 # Development
 
 ## Configure and Build the Project Using CMake Presets
@@ -53,6 +57,30 @@ ctest --test-dir build
 > configuring the project.
 
 ## Dependency Management
+
+### vcpkg
+
+The best way to install the project's dependencies is to use the vcpkg workflow.
+
+To do so, make sure vcpkg is installed and `VCPKG_ROOT` is defined in your environment,
+then specify
+`-DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"`. Vcpkg will handle
+the project's dependencies, including GoogleTest.
+
+Example commands:
+
+```shell
+cmake \
+  -B build \
+  -S . \
+  -DCMAKE_CXX_STANDARD=17 \
+  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+cmake --build build
+ctest --test-dir build
+```
+
+The file `./vcpkg.json` configures the list of dependencies that will be configured by
+vcpkg.
 
 ### FetchContent
 
