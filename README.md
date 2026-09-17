@@ -65,7 +65,7 @@ You can disable building examples by setting CMake option `BEMAN_CSTRING_VIEW_BU
 |------------|---------|---------------|-------------------|
 | GCC        | 16-13   | C++26-C++17   | libstdc++         |
 | GCC        | 12-11   | C++23-C++17   | libstdc++         |
-| Clang      | 22-19   | C++26-C++17   | libstdc++, libc++ |
+| Clang      | 23-19   | C++26-C++17   | libstdc++, libc++ |
 | Clang      | 18      | C++26-C++17   | libc++            |
 | Clang      | 18      | C++23-C++17   | libstdc++         |
 | Clang      | 17      | C++26-C++17   | libc++            |
